@@ -1,0 +1,40 @@
+## GENERAL IGNORE RULES
+HELP.md
+*.log
+
+## GRADLE / BUILD ARTIFACTS
+.gradle
+/build/
+**/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+## STS / Eclipse
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+
+## IntelliJ IDEA
+.idea
+*.iws
+*.ipr
+**/*.iml
+out/
+**/out/
+
+## NetBeans & VS Code
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+.vscode/
+
+
+## OS / System Files
+.DS_Store
+Thumbs.db

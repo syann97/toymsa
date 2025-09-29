@@ -1,0 +1,8 @@
+rootProject.name = 'new-toy-msa'
+
+// 하위 서비스 디렉토리 목록을 포함합니다.
+include 'discovery-service'
+include 'user-service'
+include 'first-service'
+include 'second-service'
+nclude 'apigateway-service'
