@@ -1,21 +1,18 @@
 package com.github.syann97.toymsa.apigatewayservice.filter;
 
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
-
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @Component
 @Slf4j
-public class CustomFilter extends AbstractGatewayFilterFactory<CustomFilter.Config> {
-	public CustomFilter() {
-		super(CustomFilter.Config.class);
-	}
+public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Config> {
+	public GlobalFilter() { super(Config.class); }
 
 	@Override
 	public GatewayFilter apply(Config config) {
@@ -23,12 +20,16 @@ public class CustomFilter extends AbstractGatewayFilterFactory<CustomFilter.Conf
 			ServerHttpRequest request = exchange.getRequest();
 			ServerHttpResponse response = exchange.getResponse();
 
-			// Custom Pre Filter
-			log.info("Custom PRE Filter: request id -> {}", request.getId());
+			log.info("Global Filter baseMessage: {}, {}", config.getBaseMessage(), request.getRemoteAddress());
+
+			if (config.isPreLogger()) {
+				log.info("Global Filter Start: request id -> {}", request.getId());
+			}
 
 			return chain.filter(exchange).then(Mono.fromRunnable(() -> {
-				// Custom Post Filter
-				log.info("Custom POST Filter: response code -> {}", response.getStatusCode());
+				if (config.isPostLogger()) {
+					log.info("Global Filter End: response code -> {}", response.getStatusCode());
+				}
 			}));
 		};
 	}
