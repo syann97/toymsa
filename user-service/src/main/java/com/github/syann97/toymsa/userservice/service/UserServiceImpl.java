@@ -4,18 +4,27 @@ import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.github.syann97.toymsa.userservice.jpa.UserEntity;
 import com.github.syann97.toymsa.userservice.jpa.UserRepository;
 import com.github.syann97.toymsa.userservice.vo.UserVo;
 
-import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
-@AllArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
-	private UserRepository userRepository;
+	UserRepository userRepository;
+
+	PasswordEncoder passwordEncoder;
+
+	public UserServiceImpl(PasswordEncoder passwordEncoder, UserRepository userRepository) {
+		this.passwordEncoder = passwordEncoder;
+		this.userRepository = userRepository;
+	}
 
 	@Override
 	public UserVo createUser(UserVo userVo) {
@@ -24,7 +33,7 @@ public class UserServiceImpl implements UserService {
 		ModelMapper mapper = new ModelMapper();
 		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 		UserEntity userEntity = mapper.map(userVo, UserEntity.class);
-		userEntity.setEncryptedPassword("encryptedPassword");
+		userEntity.setEncryptedPassword(passwordEncoder.encode(userVo.getPassword()));
 
 		userRepository.save(userEntity);
 
