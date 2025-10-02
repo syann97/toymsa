@@ -22,7 +22,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/user-service")
 @Slf4j
 public class UserController {
 	private final Environment environment;
