@@ -1,5 +1,7 @@
 package com.github.syann97.toymsa.userservice.dto;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.Data;
@@ -12,4 +14,6 @@ public class ResponseUser {
 	private String name;
 
 	private String userId;
+
+	private List<ResponseOrder> orders;
 }

@@ -1,6 +1,9 @@
 package com.github.syann97.toymsa.userservice.vo;
 
 import java.util.Date;
+import java.util.List;
+
+import com.github.syann97.toymsa.userservice.dto.ResponseOrder;
 
 import lombok.Data;
 
@@ -13,4 +16,6 @@ public class UserVo {
 	private Date createdAt;
 
 	private String encryptedPwd;
+
+	private List<ResponseOrder> orders;
 }
