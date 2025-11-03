@@ -1,7 +1,7 @@
 package com.github.syann97.toymsa.catalogservice.jpa;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface CatalogRepository extends JpaRepository<CatalogEntity, Long> {
+public interface CatalogRepository extends CrudRepository<CatalogEntity, Long> {
 	CatalogEntity findByProductId(String productId);
 }
