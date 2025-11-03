@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.data.annotation.CreatedDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
