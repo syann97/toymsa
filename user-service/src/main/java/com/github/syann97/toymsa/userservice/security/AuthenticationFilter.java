@@ -30,13 +30,13 @@ import java.util.Date;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	private UserService userService;
-	private Environment env;
+	private Environment environment;
 
-	public AuthenticationFilter(UserService userService, Environment env,
-		AuthenticationManager authenticationManager) {
+	public AuthenticationFilter(AuthenticationManager authenticationManager,
+		UserService userService, Environment environment) {
+		super(authenticationManager);
 		this.userService = userService;
-		this.env = env;
-		super.setAuthenticationManager(authenticationManager);
+		this.environment = environment;
 	}
 
 	@Override
@@ -60,23 +60,21 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	}
 
 	@Override
-	protected void successfulAuthentication(HttpServletRequest req,
-		HttpServletResponse res,
-		FilterChain chain,
-		Authentication authResult)
+	protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res,
+		FilterChain chain, Authentication authResult)
 		throws IOException, ServletException {
-		String userEmail = ((User)authResult.getPrincipal()).getUsername(); // email
-		UserVo userDetails = userService.getUserDetailsByEmail(userEmail);
+		String userName = ((User) authResult.getPrincipal()).getUsername();
+		UserVo userDetails = userService.getUserDetailsByEmail(userName);
 
-		byte[] secretKeyBytes = env.getProperty("token.secret").getBytes(StandardCharsets.UTF_8);
+		byte[] secretKeyBytes = environment.getProperty("token.secret").getBytes(StandardCharsets.UTF_8);
 
 		SecretKey secretKey = Keys.hmacShaKeyFor(secretKeyBytes);
 
 		Instant now = Instant.now();
 
 		String token = Jwts.builder()
-			.subject(userDetails.getUserId()) // UUID
-			.expiration(Date.from(now.plusMillis(Long.parseLong(env.getProperty("token.expiration-time")))))
+			.subject(userDetails.getUserId())
+			.expiration(Date.from(now.plusMillis(Long.parseLong(environment.getProperty("token.expiration-time")))))
 			.issuedAt(Date.from(now))
 			.signWith(secretKey)
 			.compact();
