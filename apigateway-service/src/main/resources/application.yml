@@ -1,7 +1,6 @@
 server:
   port: 8000
 
-
 eureka:
   client:
     register-with-eureka: true
@@ -79,5 +78,16 @@ spring:
                     preLogger: true
                     postLogger: true
 
-token:
-  secret: my-very-long-secret-key-1234567890123456
+#token:
+#  secret: my-very-long-secret-key-1234567890123456
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - refresh
+          - health
+          - beans
+          - info
+          - httpexchanges
