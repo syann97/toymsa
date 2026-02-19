@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: user-service
+  profiles:
+    active: dev
   datasource:
     url: jdbc:mysql://localhost:3306/msa_user_service
     username: root
@@ -30,7 +32,7 @@ eureka:
 
 
 greeting:
-  message: Welcome to the Simple E-commerce.
+  message: Welcome to the Simple E-commerce. (spring boot)
 
 
 #token:
