@@ -48,7 +48,7 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
-
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 dependencyManagement {
