@@ -12,6 +12,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,6 +30,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 
+@Slf4j
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	private UserService userService;
 	private Environment environment;
@@ -66,6 +69,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 		String userName = ((User) authResult.getPrincipal()).getUsername();
 		UserVo userDetails = userService.getUserDetailsByEmail(userName);
 
+		log.info("User가 현재 사용하는 Secret: {}", environment.getProperty("token.secret"));
 		byte[] secretKeyBytes = environment.getProperty("token.secret").getBytes(StandardCharsets.UTF_8);
 
 		SecretKey secretKey = Keys.hmacShaKeyFor(secretKeyBytes);

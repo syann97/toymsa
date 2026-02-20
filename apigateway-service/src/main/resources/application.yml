@@ -11,6 +11,15 @@ eureka:
 spring:
   application:
     name: apigateway-service
+  profiles:
+    active: native
+  config:
+    import: optional:configserver:http://127.0.0.1:8888
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
   cloud:
     gateway:
       server:
@@ -77,6 +86,8 @@ spring:
                     baseMessage: Hi, there.
                     preLogger: true
                     postLogger: true
+    config:
+      name: application
 
 #token:
 #  secret: my-very-long-secret-key-1234567890123456
@@ -91,3 +102,4 @@ management:
           - beans
           - info
           - httpexchanges
+          - busrefresh
