@@ -33,3 +33,7 @@ management:
         include:
           - health
           - busrefresh
+
+
+encrypt:
+  key: abcdefghijklmnopqrstuvwxyz1234567890
