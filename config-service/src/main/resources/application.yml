@@ -16,7 +16,7 @@ spring:
     config:
       server:
         native:
-          search-locations: file:///D:/Seyoung/DEV/Spring/native-file-repo
+          search-locations: file:///D:/Seyoung/DEV/Spring/toymsa-source/native-file-repo
         git:  # default
 #          uri: file:///D:/Seyoung/DEV/Spring/git-local-repo
           uri: https://github.com/syann97/toymasa-spring-cloud-config
@@ -33,3 +33,11 @@ management:
         include:
           - health
           - busrefresh
+
+
+encrypt:
+#  key: abcdefghijklmnopqrstuvwxyz1234567890
+  key-store:
+    location: file:///D:/Seyoung/DEV/Spring/toymsa-source/keystore/apiEncryptionKey.jks
+    password: 1q2w3e4r
+    alias: apiEncryptionKey
