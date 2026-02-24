@@ -8,6 +8,7 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -93,9 +94,9 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 
-	@GetMapping("/users/{userId}")
-	public ResponseEntity<ResponseUser> getUser(@PathVariable String userId) {
-		UserEntity user = userRepository.findByUserId(userId);
+	@GetMapping(value = "/users/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<ResponseUser> getUser(@PathVariable("userId") String userId) {
+		UserVo user = userService.getUserByUserId(userId);
 
 		if (user == null) {
 			throw new UsernameNotFoundException("User not found with userId: " + userId);
