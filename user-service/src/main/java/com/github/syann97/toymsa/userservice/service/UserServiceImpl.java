@@ -93,23 +93,7 @@ public class UserServiceImpl implements UserService {
 		// List<ResponseOrder> orderList = orderListResponse.getBody();
 
 		/* Using a feignClient */
-		List<ResponseOrder> orderList = null;
-
-
-		/*
-		* feign으로 서비스의 경로를 틀려 예외 발생하는 경우
-		* - orderList를 null로 초기화하고 try-catch문 진입
-		* - try-catch문에서 예외 발생 시 ERROR 레벨의 로깅 출력
-		* - 그러나 호출은 정상적으로 수행됨
-		* - (orderList가 null로 Response에서는 안보임)
-		* */
-		try {
-			orderList = orderServiceClient.getOrders(userId);
-		}
-		catch (Exception e) {
-			log.error(e.getMessage());
-		}
-
+		List<ResponseOrder> orderList = orderServiceClient.getOrders(userId);
 		userVo.setOrders(orderList);
 
 		return userVo;

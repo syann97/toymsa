@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 
+import feign.Feign;
 import feign.Logger;
 
 @SpringBootApplication
