@@ -26,7 +26,7 @@ public class KafkaConsumer {
 	}
 
 	// 카프카에 해당 토픽명으로 데이터가 들어오면 해당 메서드를 실행
-	@KafkaListener(topics = "example-catalog")
+	@KafkaListener(topics = "example-catalog-topic")
 	public void updateQty(String kafkaMessage) {
 		log.info("Kafka Message : -> " + kafkaMessage);
 
