@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.syann97.toymsa.orderservice.dto.RequestOrder;
 import com.github.syann97.toymsa.orderservice.dto.ResponseOrder;
 import com.github.syann97.toymsa.orderservice.jpa.OrderEntity;
-import com.github.syann97.toymsa.orderservice.messagequeue.KafkaProducer;
 import com.github.syann97.toymsa.orderservice.service.OrderService;
 import com.github.syann97.toymsa.orderservice.vo.OrderVo;
 
@@ -30,11 +29,15 @@ import lombok.extern.slf4j.Slf4j;
 public class OrderController {
 
 	private final OrderService orderService;
-	KafkaProducer kafkaProducer;
+	// KafkaProducer kafkaProducer;
 
-	public OrderController(OrderService orderService, KafkaProducer kafkaProducer) {
+	// public OrderController(OrderService orderService, KafkaProducer kafkaProducer) {
+	// 	this.orderService = orderService;
+	// 	this.kafkaProducer = kafkaProducer;
+	// }
+
+	public OrderController(OrderService orderService) {
 		this.orderService = orderService;
-		this.kafkaProducer = kafkaProducer;
 	}
 
 	@GetMapping("/health-check")
@@ -54,8 +57,8 @@ public class OrderController {
 
 		ResponseOrder responseOrder = modelMapper.map(createVo, ResponseOrder.class);
 
-		/* send this order to the kafka */
-		kafkaProducer.send("example-catalog-topic", orderVo);
+		// /* send this order to the kafka */
+		// kafkaProducer.send("orders-cdc", orderVo);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseOrder);
 	}

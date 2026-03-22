@@ -8,7 +8,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.syann97.toymsa.catalogservice.jpa.CatalogEntity;
 import com.github.syann97.toymsa.catalogservice.jpa.CatalogRepository;
@@ -26,23 +26,36 @@ public class KafkaConsumer {
 	}
 
 	// 카프카에 해당 토픽명으로 데이터가 들어오면 해당 메서드를 실행
-	@KafkaListener(topics = "example-catalog-topic")
+	@KafkaListener(topics = "orders-cdc.msa_order_service.orders")
 	public void updateQty(String kafkaMessage) {
-		log.info("Kafka Message : -> " + kafkaMessage);
+		log.info("CDC Kafka Message : -> " + kafkaMessage);
 
-		Map<Object, Object> map = new HashMap<>();
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			map = mapper.readValue(kafkaMessage, new TypeReference<Map<Object, Object>>() {});
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
+			JsonNode rootNode = mapper.readTree(kafkaMessage);
+
+			JsonNode after = rootNode.path("after");
+
+			if (after.isMissingNode() || after.isNull()) {
+				return;
+			}
+
+			String productId = after.path("product_id").asText();
+			int qty = after.path("qty").asInt();
+			log.info("qty : " + qty);
+
+			CatalogEntity entity = catalogRepository.findByProductId(productId);
+
+			if (entity != null) {
+				entity.setStock(entity.getStock() - qty);
+				catalogRepository.save(entity);
+			}
+			else {
+				log.info("entity is Null !!");
+			}
 		}
-
-		CatalogEntity entity = catalogRepository.findByProductId((String)map.get("productId"));
-
-		if (entity != null) {
-			entity.setStock(entity.getStock() - (Integer)map.get("qty"));
-			catalogRepository.save(entity);
+		catch (JsonProcessingException e) {
+			e.printStackTrace();
 		}
 	}
 }
