@@ -29,6 +29,12 @@ import lombok.extern.slf4j.Slf4j;
 public class OrderController {
 
 	private final OrderService orderService;
+	// KafkaProducer kafkaProducer;
+
+	// public OrderController(OrderService orderService, KafkaProducer kafkaProducer) {
+	// 	this.orderService = orderService;
+	// 	this.kafkaProducer = kafkaProducer;
+	// }
 
 	public OrderController(OrderService orderService) {
 		this.orderService = orderService;
@@ -36,22 +42,24 @@ public class OrderController {
 
 	@GetMapping("/health-check")
 	public String status(HttpServletRequest request) {
-		return String.format("It's Working in Catalog Service on Port %s", request.getServerPort());
+		return String.format("It's Working in Catalog Service on Port %d", (Integer) request.getServerPort());
 	}
 
 	@PostMapping("/{userId}/orders")
 	public ResponseEntity<ResponseOrder> createOrder(@PathVariable String userId, @RequestBody RequestOrder orderDetails) {
-		log.info("Before add orders data");
 		ModelMapper modelMapper = new ModelMapper();
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
+		/* jpa */
 		OrderVo orderVo = modelMapper.map(orderDetails, OrderVo.class);
 		orderVo.setUserId(userId);
-
 		OrderVo createVo = orderService.createOrder(orderVo);
+
 		ResponseOrder responseOrder = modelMapper.map(createVo, ResponseOrder.class);
 
-		log.info("After added orders data");
+		// /* send this order to the kafka */
+		// kafkaProducer.send("orders-cdc", orderVo);
+
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseOrder);
 	}
 
