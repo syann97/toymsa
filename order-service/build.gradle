@@ -52,6 +52,9 @@ dependencies {
 
 	// Feign Micrometer
 	implementation 'io.github.openfeign:feign-micrometer'
+
+	// Prometheus
+	implementation 'io.micrometer:micrometer-registry-prometheus'
 }
 
 dependencyManagement {

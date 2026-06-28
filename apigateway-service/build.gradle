@@ -45,6 +45,9 @@ dependencies {
 	// Cloud Bus
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
+	
+	// Prometheus
+	implementation 'io.micrometer:micrometer-registry-prometheus'
 }
 
 dependencyManagement {
