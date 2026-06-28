@@ -7,6 +7,8 @@ import java.util.UUID;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
@@ -34,17 +36,21 @@ public class UserServiceImpl implements UserService {
 	UserRepository userRepository;
 	PasswordEncoder passwordEncoder;
 	OrderServiceClient orderServiceClient;
+	CircuitBreakerFactory circuitBreakerFactory;
 
 	public UserServiceImpl(PasswordEncoder passwordEncoder,
 				UserRepository userRepository,
 				Environment environment,
 				RestTemplate restTemplate,
-				OrderServiceClient orderServiceClient) {
+				OrderServiceClient orderServiceClient,
+				CircuitBreakerFactory circuitBreakerFactory
+		) {
 		this.passwordEncoder = passwordEncoder;
 		this.userRepository = userRepository;
 		this.environment = environment;
 		this.restTemplate = restTemplate;
 		this.orderServiceClient = orderServiceClient;
+		this.circuitBreakerFactory = circuitBreakerFactory;
 	}
 
 	@Override
@@ -93,7 +99,15 @@ public class UserServiceImpl implements UserService {
 		// List<ResponseOrder> orderList = orderListResponse.getBody();
 
 		/* Using a feignClient */
-		List<ResponseOrder> orderList = orderServiceClient.getOrders(userId);
+		// List<ResponseOrder> orderList = orderServiceClient.getOrders(userId);
+
+		log.info("Before call orders microservice");
+		/* CircuitBreaker */
+		CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitbreaker");
+		List<ResponseOrder> orderList = circuitBreaker.run(() -> orderServiceClient.getOrders(userId),
+			throwable -> new ArrayList<>());
+
+		log.info("After call orders microservice");
 		userVo.setOrders(orderList);
 
 		return userVo;
