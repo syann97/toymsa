@@ -65,6 +65,10 @@ dependencies {
 
     // Feign Micrometer
     implementation 'io.github.openfeign:feign-micrometer'
+
+    // Prometheus
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
 }
 
 dependencyManagement {

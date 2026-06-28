@@ -64,6 +64,8 @@ management:
           - beans
           - info
           - busrefresh
+          - prometheus
+          - metrics
   tracing:
     sampling:
       probability: 1.0
