@@ -47,6 +47,7 @@ public class OrderController {
 
 	@PostMapping("/{userId}/orders")
 	public ResponseEntity<ResponseOrder> createOrder(@PathVariable String userId, @RequestBody RequestOrder orderDetails) {
+		log.info("Before add orders data");
 		ModelMapper modelMapper = new ModelMapper();
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
@@ -60,6 +61,7 @@ public class OrderController {
 		// /* send this order to the kafka */
 		// kafkaProducer.send("orders-cdc", orderVo);
 
+		log.info("After add orders data");
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseOrder);
 	}
 

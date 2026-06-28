@@ -52,6 +52,19 @@ dependencies {
     // Cloud Bus
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
+
+    implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
+
+    // 2.x 버전 sleuth 대용
+    implementation 'io.micrometer:micrometer-observation'
+    implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+//    implementation 'io.micrometer:context-propagation'
+
+    // 2.x 버전 zipkin 대용
+    implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
+
+    // Feign Micrometer
+    implementation 'io.github.openfeign:feign-micrometer'
 }
 
 dependencyManagement {

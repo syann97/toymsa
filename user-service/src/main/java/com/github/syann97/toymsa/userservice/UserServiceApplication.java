@@ -14,6 +14,8 @@ import org.springframework.web.client.RestTemplate;
 
 import feign.Feign;
 import feign.Logger;
+import jakarta.annotation.PostConstruct;
+import reactor.core.publisher.Hooks;
 
 @SpringBootApplication
 @EnableDiscoveryClient
@@ -24,6 +26,10 @@ public class UserServiceApplication {
 		SpringApplication.run(UserServiceApplication.class, args);
 	}
 
+	@PostConstruct
+	public void init() {
+		Hooks.enableAutomaticContextPropagation();
+	}
 
 	@Bean
 	public CommandLineRunner runner (DataSource dataSource) {
